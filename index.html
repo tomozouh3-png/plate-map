@@ -122,7 +122,7 @@
 </head>
 <body>
 <div class="toolbar">
-  <label>プレート
+  <label><span data-i18n="plate"></span>
     <select id="fmt">
       <option value="6">6 well (2×3)</option>
       <option value="12">12 well (3×4)</option>
@@ -131,53 +131,54 @@
       <option value="96">96 well (8×12)</option>
     </select>
   </label>
-  <label>文字サイズ
-    <select id="fs"><option value="auto">自動</option><option>9</option><option>10</option><option>11</option><option>12</option><option>14</option><option>16</option><option>18</option></select>
+  <label><span data-i18n="fs"></span>
+    <select id="fs"><option value="auto" data-i18n="auto">自動</option><option>9</option><option>10</option><option>11</option><option>12</option><option>14</option><option>16</option><option>18</option></select>
   </label>
-  <label>メモ文字
+  <label><span data-i18n="mfs"></span>
     <select id="mfs"><option>12</option><option>14</option><option>16</option><option>17</option><option>18</option><option>20</option><option>24</option><option>28</option></select>
   </label>
-  <label>行ラベル
+  <label><span data-i18n="rl"></span>
     <select id="rl"><option value="AZ">A, B, C…</option><option value="az">a, b, c…</option></select>
   </label>
   <span class="sp"></span>
-  <label>保存済み
-    <select id="lib"><option value="">開く…</option></select>
+  <label><span data-i18n="saved"></span>
+    <select id="lib"><option value="" data-i18n="open">開く…</option></select>
   </label>
-  <button id="libSave">タイトルで保存</button>
-  <button id="libDel">削除</button>
-  <button id="newPlate">新規</button>
-  <button id="clear">全消去</button>
-  <button id="print" class="primary">PDF保存 / 印刷</button>
+  <button id="libSave" data-i18n="libSave">タイトルで保存</button>
+  <button id="libDel" data-i18n="libDel">削除</button>
+  <button id="newPlate" data-i18n="newPlate">新規</button>
+  <button id="clear" data-i18n="clear">全消去</button>
+  <button id="lang" title="Language / 言語">English</button>
+  <button id="print" class="primary" data-i18n="print">PDF保存 / 印刷</button>
 </div>
 
 <div class="page" id="page">
   <div class="meta">
-    <input class="title" id="title" placeholder="タイトル(例: 260805 HHV-6B infection)">
+    <input class="title" id="title" data-i18n-ph="phTitle" placeholder="タイトル(例: 260805 HHV-6B infection)">
     <input id="date" type="date">
-    <textarea id="memo" placeholder="メモ(細胞株、プレートの種類、培地、共通条件など)"></textarea>
+    <textarea id="memo" data-i18n-ph="phMemo" placeholder="メモ(細胞株、プレートの種類、培地、共通条件など)"></textarea>
   </div>
   <div class="plate-body"><table id="plate"></table></div>
 </div>
 <div class="pal" id="pal"></div>
 <div class="bulk" id="bulk">
   <b id="bulkTitle"></b>
-  <textarea id="bulkText" placeholder="共通条件(例: 293T, DMEM 10%FBS)"></textarea>
+  <textarea id="bulkText" data-i18n-ph="phBulk" placeholder="共通条件(例: 293T, DMEM 10%FBS)"></textarea>
   <div class="row">
-    <button type="button" class="act primary" id="bulkAdd">追記</button>
-    <button type="button" class="act" id="bulkSet">上書き</button>
-    <button type="button" class="act" id="bulkClr">文字を消去</button>
+    <button type="button" class="act primary" id="bulkAdd" data-i18n="bulkAdd">追記</button>
+    <button type="button" class="act" id="bulkSet" data-i18n="bulkSet">上書き</button>
+    <button type="button" class="act" id="bulkClr" data-i18n="bulkClr">文字を消去</button>
   </div>
-  <div class="row cols" id="bulkCols"><span>色:</span></div>
+  <div class="row cols" id="bulkCols"><span data-i18n="colorLbl">色:</span></div>
 </div>
-<div class="hint">「PDF保存 / 印刷」→ 送信先を「PDFに保存」(用紙: A4 横、余白: デフォルト、背景のグラフィック: ON 推奨)。入力内容はこのブラウザに自動保存されます。行・列ラベルのクリックやwellのドラッグで一括入力・色付けができます。</div>
+<div class="hint" data-i18n="hint">「PDF保存 / 印刷」→ 送信先を「PDFに保存」(用紙: A4 横、余白: デフォルト、背景のグラフィック: ON 推奨)。入力内容はこのブラウザに自動保存されます。行・列ラベルのクリックやwellのドラッグで一括入力・色付けができます。</div>
 <footer class="site-foot">
   <div class="share">
-    <a id="shareX" target="_blank" rel="noopener">Xで共有</a>
-    <a href="https://github.com/sponsors/tomozouh3-png" target="_blank" rel="noopener">♥ GitHub Sponsorsで応援</a>
+    <a id="shareX" target="_blank" rel="noopener" data-i18n="shareX">Xで共有</a>
+    <a href="https://github.com/sponsors/tomozouh3-png" target="_blank" rel="noopener" data-i18n="sponsor">♥ GitHub Sponsorsで応援</a>
   </div>
-  <p><b>プライバシー:</b>入力内容(タイトル・メモ・各wellの記載・保存データ)はお使いのブラウザ内(localStorage)にのみ保存され、外部のサーバーには送信されません。ブラウザのデータを消去すると保存内容も消えます。大切な記録はPDFでも保管してください。</p>
-  <p><b>免責:</b>本ツールは実験記録の作図補助を目的として現状有姿で提供します。表示や出力内容の正確性・保存の確実性、利用により生じた損害について、作者は責任を負いません。実験の最終的な記録は各自でご確認ください。</p>
+  <p data-i18n-html="privacy"><b>プライバシー:</b>入力内容(タイトル・メモ・各wellの記載・保存データ)はお使いのブラウザ内(localStorage)にのみ保存され、外部のサーバーには送信されません。ブラウザのデータを消去すると保存内容も消えます。大切な記録はPDFでも保管してください。</p>
+  <p data-i18n-html="disclaimer"><b>免責:</b>本ツールは実験記録の作図補助を目的として現状有姿で提供します。表示や出力内容の正確性・保存の確実性、利用により生じた損害について、作者は責任を負いません。実験の最終的な記録は各自でご確認ください。</p>
   <p>© 2026 tomozouh / <a href="https://opensource.org/license/mit" target="_blank" rel="noopener">MIT License</a></p>
 </footer>
 <style>
@@ -188,10 +189,7 @@
   .site-foot p{margin:4px 0}
   @media print{.site-foot{display:none}}
 </style>
-<script>
-  document.getElementById("shareX").href = "https://twitter.com/intent/tweet?text=" +
-    encodeURIComponent("プレートマップ作成ツール(6〜96well、PDF出力)") + "&url=" + encodeURIComponent(location.href);
-</script>
+
 
 <script>
 const FORMATS = {6:[2,3],12:[3,4],24:[4,6],48:[6,8],96:[8,12]};
@@ -199,10 +197,86 @@ const ROWH = {6:150,12:110,24:80,48:52,96:40};
 const AUTOFS = {6:15,12:13,24:11,48:9,96:7.5};
 const KEY = "plateMapV1";
 const $ = id => document.getElementById(id);
-let state = {fmt:6, fs:"auto", rl:"AZ", title:"", date:"", memo:"", plates:{}, colors:{}, mfs:"17"};
+let state = {fmt:6, fs:"auto", rl:"AZ", title:"", date:"", memo:"", plates:{}, colors:{}, mfs:"17", lang:""};
 
 try { const s = localStorage.getItem(KEY); if (s) state = Object.assign(state, JSON.parse(s)); } catch(e){}
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} };
+
+/* ---- 言語切替 / i18n ---- */
+const I18N = {
+ ja: {
+  title:"プレートマップ作成ツール | 6〜96wellの培養条件を書き込んでPDF出力",
+  desc:"6/12/24/48/96wellプレートの各wellに培地・細胞・処理条件を直接書き込み、色分け・行列の一括入力をして、PDFとして保存できる無料のブラウザツール。入力内容は外部送信されません。",
+  ogTitle:"プレートマップ作成ツール",
+  ogDesc:"6〜96wellの各wellに条件を書き込み、色分け・一括入力してPDF出力。無料・登録不要・データは外部送信されません。",
+  shareText:"プレートマップ作成ツール(6〜96well、PDF出力)",
+  plate:"プレート", fs:"文字サイズ", mfs:"メモ文字", rl:"行ラベル", saved:"保存済み", auto:"自動", open:"開く…",
+  libSave:"タイトルで保存", libDel:"削除", newPlate:"新規", clear:"全消去", print:"PDF保存 / 印刷",
+  phTitle:"タイトル(例: 260805 HHV-6B infection)", phMemo:"メモ(細胞株、プレートの種類、培地、共通条件など)", phBulk:"共通条件(例: 293T, DMEM 10%FBS)",
+  bulkAdd:"追記", bulkSet:"上書き", bulkClr:"文字を消去", colorLbl:"色:",
+  hint:"「PDF保存 / 印刷」→ 送信先を「PDFに保存」(用紙: A4 横、余白: デフォルト、背景のグラフィック: ON 推奨)。入力内容はこのブラウザに自動保存されます。行・列ラベルのクリックやwellのドラッグで一括入力・色付けができます。",
+  shareX:"Xで共有", sponsor:"♥ GitHub Sponsorsで応援",
+  privacy:"<b>プライバシー:</b>入力内容(タイトル・メモ・各wellの記載・保存データ)はお使いのブラウザ内(localStorage)にのみ保存され、外部のサーバーには送信されません。ブラウザのデータを消去すると保存内容も消えます。大切な記録はPDFでも保管してください。",
+  disclaimer:"<b>免責:</b>本ツールは実験記録の作図補助を目的として現状有姿で提供します。表示や出力内容の正確性・保存の確実性、利用により生じた損害について、作者は責任を負いません。実験の最終的な記録は各自でご確認ください。",
+  colTip:"{0}列にまとめて入力", rowTip:"{0}行にまとめて入力", pickColor:"色を選ぶ", noColor:"色なし", applyColor:"この色を行/列全体に",
+  bulkRow:"{0} 行 全体に入力", bulkCol:"{0} 列 全体に入力", bulkRange:"選択範囲({0} well)に入力",
+  whatRow:"行", whatCol:"列", whatRange:"選択範囲",
+  confirmClr:"この{0}のすべての文字を消去しますか?",
+  confirmClear:"現在のプレート({0} well)と上部の入力をすべて消去しますか?",
+  saveFail:"保存に失敗しました(ブラウザの保存が無効の可能性)",
+  needTitle:"タイトルを入力してから保存してください。",
+  confirmOverwrite:"「{0}」はすでに保存されています。上書きしますか?",
+  needSelect:"削除する保存済みデータを「開く…」から選んでください。",
+  confirmDel:"保存済みの「{0}」を削除しますか?(現在の画面の内容は消えません)",
+  confirmNew:"画面を空にして新しいプレートを始めます。(保存済みデータは消えません。必要なら先に保存してください)"
+ },
+ en: {
+  title:"Plate Map Maker | Write culture conditions on 6–96 well plates and export to PDF",
+  desc:"A free browser tool to write medium, cells and treatments directly into each well of 6/12/24/48/96-well plates, color-code wells, fill rows and columns at once, and save as PDF. Nothing you type is sent anywhere.",
+  ogTitle:"Plate Map Maker",
+  ogDesc:"Write conditions into each well of 6–96 well plates, color-code, bulk-fill and export to PDF. Free, no sign-up, no data sent to any server.",
+  shareText:"Plate Map Maker (6–96 well plates, PDF export)",
+  plate:"Plate", fs:"Font size", mfs:"Memo font", rl:"Row labels", saved:"Saved", auto:"Auto", open:"Open…",
+  libSave:"Save by title", libDel:"Delete", newPlate:"New", clear:"Clear all", print:"Save PDF / Print",
+  phTitle:"Title (e.g. 260805 HHV-6B infection)", phMemo:"Memo (cell line, plate type, medium, common conditions, etc.)", phBulk:"Common condition (e.g. 293T, DMEM 10% FBS)",
+  bulkAdd:"Append", bulkSet:"Overwrite", bulkClr:"Clear text", colorLbl:"Color:",
+  hint:"Click \"Save PDF / Print\" and choose \"Save as PDF\" as the destination (paper: A4 landscape, margins: default, background graphics: ON recommended). Your input is saved automatically in this browser. Click a row/column label or drag across wells to fill in or color many wells at once.",
+  shareX:"Share on X", sponsor:"♥ Support on GitHub Sponsors",
+  privacy:"<b>Privacy:</b> Everything you enter (title, memo, well contents, saved plates) is stored only in your own browser (localStorage) and is never sent to any server. Clearing your browser data also erases it. Keep important records as PDFs too.",
+  disclaimer:"<b>Disclaimer:</b> This tool is provided \"as is\" as a drawing aid for experiment records. The author is not liable for the accuracy of what is displayed or exported, the reliability of saved data, or any damage arising from its use. Please verify your final records yourself.",
+  colTip:"Fill column {0}", rowTip:"Fill row {0}", pickColor:"Choose color", noColor:"No color", applyColor:"Apply this color to the whole row/column",
+  bulkRow:"Fill all of row {0}", bulkCol:"Fill all of column {0}", bulkRange:"Fill selection ({0} wells)",
+  whatRow:"row", whatCol:"column", whatRange:"selection",
+  confirmClr:"Clear all text in this {0}?",
+  confirmClear:"Clear the current plate ({0} well) and the title/date/memo?",
+  saveFail:"Could not save (browser storage may be disabled).",
+  needTitle:"Please enter a title before saving.",
+  confirmOverwrite:"\"{0}\" is already saved. Overwrite it?",
+  needSelect:"Choose the saved plate to delete from \"Open…\" first.",
+  confirmDel:"Delete the saved plate \"{0}\"? (The current screen is not affected.)",
+  confirmNew:"Start a new empty plate? (Saved plates are kept. Save first if you need this one.)"
+ }
+};
+let LANG = state.lang || ((navigator.language || "").toLowerCase().startsWith("ja") ? "ja" : "en");
+const t = (k, ...a) => { let s = (I18N[LANG] && I18N[LANG][k]) || I18N.ja[k] || k; a.forEach((v,i) => { s = s.split("{"+i+"}").join(v); }); return s; };
+function applyLang(){
+  document.documentElement.lang = LANG;
+  document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-html]").forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+  document.title = t("title");
+  const setMeta = (sel, v) => { const m = document.querySelector(sel); if (m) m.setAttribute("content", v); };
+  setMeta('meta[name="description"]', t("desc"));
+  setMeta('meta[property="og:title"]', t("ogTitle")); setMeta('meta[name="twitter:title"]', t("ogTitle"));
+  setMeta('meta[property="og:description"]', t("ogDesc")); setMeta('meta[name="twitter:description"]', t("ogDesc"));
+  setMeta('meta[property="og:locale"]', LANG === "ja" ? "ja_JP" : "en_US");
+  $("lang").textContent = LANG === "ja" ? "English" : "日本語";
+  const sx = $("shareX");
+  if (sx) sx.href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(t("shareText")) + "&url=" + encodeURIComponent(location.href);
+  [...$("pal").children].forEach((b,i) => { if (i === 0) b.title = t("noColor"); });
+  [...$("bulkCols").querySelectorAll("button")].forEach((b,i) => { b.title = i === 0 ? t("noColor") : t("applyColor"); });
+  $("bulk").style.display = "none"; clearSel && clearSel();
+}
 
 function rowLabel(i){
   const base = state.rl === "az" ? 97 : 65;
@@ -211,23 +285,23 @@ function rowLabel(i){
 
 function build(){
   const f = state.fmt, [R,C] = FORMATS[f];
-  const t = $("plate"); t.innerHTML = "";
+  const tbl = $("plate"); tbl.innerHTML = "";
   document.documentElement.style.setProperty("--rh", ROWH[f] + "px");
   document.documentElement.style.setProperty("--fs",
     (state.fs === "auto" ? AUTOFS[f] : state.fs) + "px");
   const data = state.plates[f] || (state.plates[f] = {});
 
   cells = Array.from({length:R}, () => []);
-  const hr = t.insertRow(); hr.appendChild(document.createElement("th")).className = "rowh";
+  const hr = tbl.insertRow(); hr.appendChild(document.createElement("th")).className = "rowh";
   for (let c = 0; c < C; c++){
-    const th = document.createElement("th"); th.textContent = c+1; th.className = "clk"; th.title = (c+1) + "列にまとめて入力";
+    const th = document.createElement("th"); th.textContent = c+1; th.className = "clk"; th.title = t("colTip", c+1);
     th.addEventListener("click", e => { e.stopPropagation(); openBulk(th, "col", c); });
     hr.appendChild(th);
   }
 
   for (let r = 0; r < R; r++){
-    const tr = t.insertRow();
-    const th = document.createElement("th"); th.className = "rowh clk"; th.textContent = rowLabel(r); th.title = rowLabel(r) + "行にまとめて入力"; tr.appendChild(th);
+    const tr = tbl.insertRow();
+    const th = document.createElement("th"); th.className = "rowh clk"; th.textContent = rowLabel(r); th.title = t("rowTip", rowLabel(r)); tr.appendChild(th);
     th.addEventListener("click", e => { e.stopPropagation(); openBulk(th, "row", r); });
     for (let c = 0; c < C; c++){
       const id = r + "-" + c;
@@ -245,7 +319,7 @@ function build(){
       const colors = (state.colors[f] = state.colors[f] || {});
       if (colors[id]) td.style.background = colors[id];
       const sw = document.createElement("button");
-      sw.className = "sw"; sw.type = "button"; sw.title = "色を選ぶ";
+      sw.className = "sw"; sw.type = "button"; sw.title = t("pickColor");
       sw.addEventListener("click", e => { e.stopPropagation(); openPal(sw, td, id); });
       td.appendChild(sw);
     }
@@ -256,7 +330,7 @@ const PALETTE = ["", "#fbc4c4", "#fde0b3", "#fdf3a6", "#c6efcb", "#bfe0fa", "#dc
 const pal = $("pal");
 PALETTE.forEach(c => {
   const b = document.createElement("button");
-  b.type = "button"; b.style.background = c || "#fff"; b.title = c ? c : "色なし";
+  b.type = "button"; b.style.background = c || "#fff"; b.title = c ? c : t("noColor");
   if (!c) b.textContent = "×";
   b.addEventListener("click", () => {
     if (!pal._td) return;
@@ -296,7 +370,7 @@ function clearSel(){ document.querySelectorAll("td.sel").forEach(t => t.classLis
 function openBulk(th, kind, idx){
   clearSel();
   bulkTarget = {kind, idx};
-  $("bulkTitle").textContent = (kind === "row" ? rowLabel(idx) + " 行" : (idx+1) + " 列") + " 全体に入力";
+  $("bulkTitle").textContent = kind === "row" ? t("bulkRow", rowLabel(idx)) : t("bulkCol", idx+1);
   $("bulkText").value = "";
   pal.style.display = "none";
   bulk.style.display = "flex";
@@ -317,13 +391,13 @@ $("bulkSet").onclick = () => {
   save(); $("bulkText").value = "";
 };
 $("bulkClr").onclick = () => {
-  const what = bulkTarget.kind === "row" ? "行" : bulkTarget.kind === "col" ? "列" : "選択範囲";
-  if (!confirm("この" + what + "のすべての文字を消去しますか?")) return;
+  const what = bulkTarget.kind === "row" ? t("whatRow") : bulkTarget.kind === "col" ? t("whatCol") : t("whatRange");
+  if (!confirm(t("confirmClr", what))) return;
   targetCells().forEach(c => setText(c, "")); save();
 };
 PALETTE.forEach(col => {
   const b = document.createElement("button");
-  b.type = "button"; b.style.background = col || "#fff"; b.title = col ? "この色を行/列全体に" : "色なし";
+  b.type = "button"; b.style.background = col || "#fff"; b.title = col ? t("applyColor") : t("noColor");
   if (!col) b.textContent = "×";
   b.addEventListener("click", () => {
     const colors = state.colors[state.fmt];
@@ -383,7 +457,7 @@ document.addEventListener("mouseup", () => {
 document.addEventListener("keydown", e => { if (e.key === "Escape") { bulk.style.display = "none"; pal.style.display = "none"; clearSel(); } });
 function openBulkRange(list, anchor){
   bulkTarget = {kind:"range", list};
-  $("bulkTitle").textContent = "選択範囲(" + list.length + " well)に入力";
+  $("bulkTitle").textContent = t("bulkRange", list.length);
   $("bulkText").value = "";
   bulk.style.display = "flex";
   const r = anchor.getBoundingClientRect(), w = bulk.offsetWidth;
@@ -414,7 +488,7 @@ $("fs").onchange  = e => { state.fs = e.target.value; save(); build(); };
 $("rl").onchange  = e => { state.rl = e.target.value; save(); build(); };
 ["title","date","memo"].forEach(k => $(k).addEventListener("input", e => { state[k] = e.target.value; save(); }));
 $("clear").onclick = () => {
-  if (!confirm("現在のプレート(" + state.fmt + " well)と上部の入力をすべて消去しますか?")) return;
+  if (!confirm(t("confirmClear", state.fmt))) return;
   state.plates[state.fmt] = {}; state.colors[state.fmt] = {}; state.title = state.date = state.memo = ""; /* 日付はinit()で今日に戻る */
   save(); init();
 };
@@ -428,10 +502,10 @@ $("print").onclick = () => {
 const LIBKEY = "plateMapLibV1";
 let lib = {};
 try { lib = JSON.parse(localStorage.getItem(LIBKEY) || "{}"); } catch(e){}
-const saveLibStore = () => { try { localStorage.setItem(LIBKEY, JSON.stringify(lib)); } catch(e){ alert("保存に失敗しました(ブラウザの保存が無効の可能性)"); } };
+const saveLibStore = () => { try { localStorage.setItem(LIBKEY, JSON.stringify(lib)); } catch(e){ alert(t("saveFail")); } };
 function refreshLib(selected){
   const sel = $("lib");
-  sel.innerHTML = '<option value="">開く…</option>';
+  sel.innerHTML = ""; const o0 = document.createElement("option"); o0.value = ""; o0.textContent = t("open"); sel.appendChild(o0);
   Object.keys(lib).sort((a,b) => (lib[b].savedAt||0) - (lib[a].savedAt||0)).forEach(k => {
     const o = document.createElement("option");
     o.value = k; o.textContent = k + (lib[k].date ? "  (" + lib[k].date + ")" : "");
@@ -441,8 +515,8 @@ function refreshLib(selected){
 }
 $("libSave").onclick = () => {
   const name = (state.title || "").trim();
-  if (!name) { alert("タイトルを入力してから保存してください。"); $("title").focus(); return; }
-  if (lib[name] && !confirm("「" + name + "」はすでに保存されています。上書きしますか?")) return;
+  if (!name) { alert(t("needTitle")); $("title").focus(); return; }
+  if (lib[name] && !confirm(t("confirmOverwrite", name))) return;
   const f = state.fmt;
   lib[name] = {
     title: state.title, date: state.date, memo: state.memo, fmt: f, rl: state.rl, fs: state.fs, mfs: state.mfs,
@@ -461,15 +535,17 @@ $("lib").onchange = e => {
 };
 $("libDel").onclick = () => {
   const k = $("lib").value;
-  if (!k) { alert("削除する保存済みデータを「開く…」から選んでください。"); return; }
-  if (!confirm("保存済みの「" + k + "」を削除しますか?(現在の画面の内容は消えません)")) return;
+  if (!k) { alert(t("needSelect")); return; }
+  if (!confirm(t("confirmDel", k))) return;
   delete lib[k]; saveLibStore(); refreshLib();
 };
 $("newPlate").onclick = () => {
-  if (!confirm("画面を空にして新しいプレートを始めます。(保存済みデータは消えません。必要なら先に保存してください)")) return;
+  if (!confirm(t("confirmNew"))) return;
   state.plates[state.fmt] = {}; state.colors[state.fmt] = {}; state.title = state.date = state.memo = "";
   save(); init(); refreshLib();
 };
+$("lang").onclick = () => { LANG = LANG === "ja" ? "en" : "ja"; state.lang = LANG; save(); applyLang(); build(); refreshLib($("lib").value); };
+applyLang();
 init();
 refreshLib();
 </script>
