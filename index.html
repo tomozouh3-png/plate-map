@@ -120,6 +120,14 @@
   .toolbar .langbtn{align-self:flex-start;font-size:12px;padding:4px 10px;border-radius:16px;color:#4a5f78}
   .toolbar .langbtn::before{content:"🌐 "}
 
+  /* ---- 10cm dish ---- */
+  table.dish{width:auto;margin:0 auto;table-layout:fixed}
+  table.dish th{display:none}
+  table.dish td{width:min(var(--rh),calc(100vw - 150px));height:min(var(--rh),calc(100vw - 150px));border-radius:50%;box-shadow:inset 0 0 0 7px #ffffff99,inset 0 4px 12px #1d2a3a26,0 1px 0 #ffffffd9}
+  table.dish td textarea{padding:17% 15%;text-align:center}
+  table.dish .sw{right:16%;top:12%}
+  @media print{table.dish td{box-shadow:inset 0 0 0 7px #ffffff99,inset 0 4px 12px #1d2a3a26 !important}}
+
   td.sel{border-color:var(--accent) !important;box-shadow:0 0 0 3px #2b7fd0aa !important}
   td.sel::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#2b7fd02e;pointer-events:none}
   body.dragging,body.dragging textarea{user-select:none;-webkit-user-select:none;cursor:crosshair}
@@ -151,6 +159,7 @@
           <option value="24">24 well (4×6)</option>
           <option value="48">48 well (6×8)</option>
           <option value="96">96 well (8×12)</option>
+          <option value="10cm" data-i18n="dish10">10 cm dish</option>
         </select>
       </label>
       <label><span data-i18n="fs"></span>
@@ -226,9 +235,10 @@
 
 
 <script>
-const FORMATS = {6:[2,3],12:[3,4],24:[4,6],48:[6,8],96:[8,12]};
-const ROWH = {6:150,12:110,24:80,48:52,96:40};
-const AUTOFS = {6:15,12:13,24:11,48:9,96:7.5};
+const FORMATS = {6:[2,3],12:[3,4],24:[4,6],48:[6,8],96:[8,12],"10cm":[1,1]};
+const ROWH = {6:150,12:110,24:80,48:52,96:40,"10cm":440};
+const AUTOFS = {6:15,12:13,24:11,48:9,96:7.5,"10cm":20};
+const fmtLabel = f => f === "10cm" ? t("dish10") : f + " well";
 const KEY = "plateMapV1";
 const $ = id => document.getElementById(id);
 let state = {fmt:6, fs:"auto", rl:"AZ", title:"", date:"", memo:"", plates:{}, colors:{}, mfs:"17", lang:""};
@@ -240,12 +250,13 @@ const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } c
 const I18N = {
  ja: {
   title:"プレートマップ作成ツール | 6〜96wellの培養条件を書き込んでPDF出力",
-  desc:"6/12/24/48/96wellプレートの各wellに培地・細胞・処理条件を直接書き込み、色分け・行列の一括入力をして、PDFとして保存できる無料のブラウザツール。入力内容は外部送信されません。",
+  desc:"6/12/24/48/96wellプレートや10cmディッシュの各wellに培地・細胞・処理条件を直接書き込み、色分け・行列の一括入力をして、PDFとして保存できる無料のブラウザツール。入力内容は外部送信されません。",
   ogTitle:"プレートマップ作成ツール",
   ogDesc:"6〜96wellの各wellに条件を書き込み、色分け・一括入力してPDF出力。無料・登録不要・データは外部送信されません。",
   shareText:"プレートマップ作成ツール(6〜96well、PDF出力)",
   grpPlate:"プレート設定", grpSave:"保存・管理", grpOut:"出力",
   tipSave:"今の内容をタイトル名で、このブラウザに保存します", tipNew:"画面を空にして新しいプレートを始めます(保存済みは消えません)", tipDel:"「保存済み」で選んだデータを削除します", tipClear:"今の画面の入力をすべて消去します", tipPrint:"印刷画面を開きます。送信先を「PDFに保存」にしてください",
+  dish10:"10 cm ディッシュ",
   plate:"プレート", fs:"文字サイズ", mfs:"メモ文字", rl:"行ラベル", saved:"保存済み", auto:"自動", open:"開く…",
   libSave:"タイトルで保存", libDel:"削除", newPlate:"新規", clear:"全消去", print:"PDF保存 / 印刷",
   phTitle:"タイトル(例: 260805 HHV-6B infection)", phMemo:"メモ(細胞株、プレートの種類、培地、共通条件など)", phBulk:"共通条件(例: 293T, DMEM 10%FBS)",
@@ -258,7 +269,7 @@ const I18N = {
   bulkRow:"{0} 行 全体に入力", bulkCol:"{0} 列 全体に入力", bulkRange:"選択範囲({0} well)に入力",
   whatRow:"行", whatCol:"列", whatRange:"選択範囲",
   confirmClr:"この{0}のすべての文字を消去しますか?",
-  confirmClear:"現在のプレート({0} well)と上部の入力をすべて消去しますか?",
+  confirmClear:"現在のプレート({0})と上部の入力をすべて消去しますか?",
   saveFail:"保存に失敗しました(ブラウザの保存が無効の可能性)",
   needTitle:"タイトルを入力してから保存してください。",
   confirmOverwrite:"「{0}」はすでに保存されています。上書きしますか?",
@@ -268,12 +279,13 @@ const I18N = {
  },
  en: {
   title:"Plate Map Maker | Write culture conditions on 6–96 well plates and export to PDF",
-  desc:"A free browser tool to write medium, cells and treatments directly into each well of 6/12/24/48/96-well plates, color-code wells, fill rows and columns at once, and save as PDF. Nothing you type is sent anywhere.",
+  desc:"A free browser tool to write medium, cells and treatments directly into each well of 6/12/24/48/96-well plates and 10 cm dishes, color-code wells, fill rows and columns at once, and save as PDF. Nothing you type is sent anywhere.",
   ogTitle:"Plate Map Maker",
   ogDesc:"Write conditions into each well of 6–96 well plates, color-code, bulk-fill and export to PDF. Free, no sign-up, no data sent to any server.",
   shareText:"Plate Map Maker (6–96 well plates, PDF export)",
   grpPlate:"Plate settings", grpSave:"Save & manage", grpOut:"Export",
   tipSave:"Save the current plate in this browser under its title", tipNew:"Start a new empty plate (saved plates are kept)", tipDel:"Delete the plate chosen in \"Saved\"", tipClear:"Erase everything on the current screen", tipPrint:"Opens the print dialog — choose \"Save as PDF\" as the destination",
+  dish10:"10 cm dish",
   plate:"Plate", fs:"Font size", mfs:"Memo font", rl:"Row labels", saved:"Saved", auto:"Auto", open:"Open…",
   libSave:"Save by title", libDel:"Delete", newPlate:"New", clear:"Clear all", print:"Save PDF / Print",
   phTitle:"Title (e.g. 260805 HHV-6B infection)", phMemo:"Memo (cell line, plate type, medium, common conditions, etc.)", phBulk:"Common condition (e.g. 293T, DMEM 10% FBS)",
@@ -286,7 +298,7 @@ const I18N = {
   bulkRow:"Fill all of row {0}", bulkCol:"Fill all of column {0}", bulkRange:"Fill selection ({0} wells)",
   whatRow:"row", whatCol:"column", whatRange:"selection",
   confirmClr:"Clear all text in this {0}?",
-  confirmClear:"Clear the current plate ({0} well) and the title/date/memo?",
+  confirmClear:"Clear the current plate ({0}) and the title/date/memo?",
   saveFail:"Could not save (browser storage may be disabled).",
   needTitle:"Please enter a title before saving.",
   confirmOverwrite:"\"{0}\" is already saved. Overwrite it?",
@@ -324,7 +336,7 @@ function rowLabel(i){
 
 function build(){
   const f = state.fmt, [R,C] = FORMATS[f];
-  const tbl = $("plate"); tbl.innerHTML = "";
+  const tbl = $("plate"); tbl.innerHTML = ""; tbl.classList.toggle("dish", f === "10cm");
   document.documentElement.style.setProperty("--rh", ROWH[f] + "px");
   document.documentElement.style.setProperty("--fs",
     (state.fs === "auto" ? AUTOFS[f] : state.fs) + "px");
@@ -522,12 +534,12 @@ function init(){
   build();
 }
 
-$("fmt").onchange = e => { state.fmt = +e.target.value; save(); build(); };
+$("fmt").onchange = e => { const v = e.target.value; state.fmt = /^\d+$/.test(v) ? +v : v; save(); build(); };
 $("fs").onchange  = e => { state.fs = e.target.value; save(); build(); };
 $("rl").onchange  = e => { state.rl = e.target.value; save(); build(); };
 ["title","date","memo"].forEach(k => $(k).addEventListener("input", e => { state[k] = e.target.value; save(); }));
 $("clear").onclick = () => {
-  if (!confirm(t("confirmClear", state.fmt))) return;
+  if (!confirm(t("confirmClear", fmtLabel(state.fmt)))) return;
   state.plates[state.fmt] = {}; state.colors[state.fmt] = {}; state.title = state.date = state.memo = ""; /* 日付はinit()で今日に戻る */
   save(); init();
 };
