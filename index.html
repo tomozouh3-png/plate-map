@@ -101,6 +101,25 @@
   .bulk .row button.act.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:0}
   .hint{color:#6b7c90}
 
+  /* ---- ツールバー整理 ---- */
+  .toolbar{gap:12px;align-items:stretch;padding:10px 16px 12px}
+  .toolbar .grp{display:flex;flex-direction:column;gap:4px;padding:6px 10px 8px;background:#f1f6fb;border:1px solid #dbe5f0;border-radius:12px}
+  .toolbar .gl{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--accent)}
+  .toolbar .grow{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap}
+  .toolbar label{flex-direction:column;align-items:flex-start;gap:2px;font-size:11px;color:#5a6e85}
+  .toolbar select,.toolbar button{font-size:13px;padding:6px 10px;color:var(--ink)}
+  .toolbar button#libSave::before{content:"💾 "}
+  .toolbar button#newPlate::before{content:"＋ "}
+  .toolbar button#libDel::before{content:"🗑 "}
+  .toolbar button#clear::before{content:"✕ "}
+  .toolbar button.danger{color:#b4372f;border-color:#e7c3bf;background:#fff8f7}
+  .toolbar button.danger:hover{border-color:#b4372f;box-shadow:0 1px 5px #b4372f33}
+  .toolbar .grp.out{background:linear-gradient(135deg,#e8f1fc,#efeafb);border-color:#cfd9f0}
+  .toolbar button.primary{font-size:15px;padding:10px 18px}
+  .toolbar button.primary::before{content:"📄 "}
+  .toolbar .langbtn{align-self:flex-start;font-size:12px;padding:4px 10px;border-radius:16px;color:#4a5f78}
+  .toolbar .langbtn::before{content:"🌐 "}
+
   td.sel{border-color:var(--accent) !important;box-shadow:0 0 0 3px #2b7fd0aa !important}
   td.sel::after{content:"";position:absolute;inset:0;border-radius:inherit;background:#2b7fd02e;pointer-events:none}
   body.dragging,body.dragging textarea{user-select:none;-webkit-user-select:none;cursor:crosshair}
@@ -122,34 +141,49 @@
 </head>
 <body>
 <div class="toolbar">
-  <label><span data-i18n="plate"></span>
-    <select id="fmt">
-      <option value="6">6 well (2×3)</option>
-      <option value="12">12 well (3×4)</option>
-      <option value="24">24 well (4×6)</option>
-      <option value="48">48 well (6×8)</option>
-      <option value="96">96 well (8×12)</option>
-    </select>
-  </label>
-  <label><span data-i18n="fs"></span>
-    <select id="fs"><option value="auto" data-i18n="auto">自動</option><option>9</option><option>10</option><option>11</option><option>12</option><option>14</option><option>16</option><option>18</option></select>
-  </label>
-  <label><span data-i18n="mfs"></span>
-    <select id="mfs"><option>12</option><option>14</option><option>16</option><option>17</option><option>18</option><option>20</option><option>24</option><option>28</option></select>
-  </label>
-  <label><span data-i18n="rl"></span>
-    <select id="rl"><option value="AZ">A, B, C…</option><option value="az">a, b, c…</option></select>
-  </label>
+  <div class="grp">
+    <div class="gl" data-i18n="grpPlate">プレート設定</div>
+    <div class="grow">
+      <label><span data-i18n="plate"></span>
+        <select id="fmt">
+          <option value="6">6 well (2×3)</option>
+          <option value="12">12 well (3×4)</option>
+          <option value="24">24 well (4×6)</option>
+          <option value="48">48 well (6×8)</option>
+          <option value="96">96 well (8×12)</option>
+        </select>
+      </label>
+      <label><span data-i18n="fs"></span>
+        <select id="fs"><option value="auto" data-i18n="auto">自動</option><option>9</option><option>10</option><option>11</option><option>12</option><option>14</option><option>16</option><option>18</option></select>
+      </label>
+      <label><span data-i18n="mfs"></span>
+        <select id="mfs"><option>12</option><option>14</option><option>16</option><option>17</option><option>18</option><option>20</option><option>24</option><option>28</option></select>
+      </label>
+      <label><span data-i18n="rl"></span>
+        <select id="rl"><option value="AZ">A, B, C…</option><option value="az">a, b, c…</option></select>
+      </label>
+    </div>
+  </div>
   <span class="sp"></span>
-  <label><span data-i18n="saved"></span>
-    <select id="lib"><option value="" data-i18n="open">開く…</option></select>
-  </label>
-  <button id="libSave" data-i18n="libSave">タイトルで保存</button>
-  <button id="libDel" data-i18n="libDel">削除</button>
-  <button id="newPlate" data-i18n="newPlate">新規</button>
-  <button id="clear" data-i18n="clear">全消去</button>
-  <button id="lang" title="Language / 言語">English</button>
-  <button id="print" class="primary" data-i18n="print">PDF保存 / 印刷</button>
+  <div class="grp">
+    <div class="gl" data-i18n="grpSave">保存・管理</div>
+    <div class="grow">
+      <label><span data-i18n="saved"></span>
+        <select id="lib"><option value="" data-i18n="open">開く…</option></select>
+      </label>
+      <button id="libSave" data-i18n="libSave" data-i18n-title="tipSave">タイトルで保存</button>
+      <button id="newPlate" data-i18n="newPlate" data-i18n-title="tipNew">新規</button>
+      <button id="libDel" class="danger" data-i18n="libDel" data-i18n-title="tipDel">削除</button>
+      <button id="clear" class="danger" data-i18n="clear" data-i18n-title="tipClear">全消去</button>
+    </div>
+  </div>
+  <div class="grp out">
+    <div class="gl" data-i18n="grpOut">出力</div>
+    <div class="grow">
+      <button id="print" class="primary" data-i18n="print" data-i18n-title="tipPrint">PDF保存 / 印刷</button>
+    </div>
+  </div>
+  <button id="lang" class="langbtn" title="Language / 言語">English</button>
 </div>
 
 <div class="page" id="page">
@@ -210,6 +244,8 @@ const I18N = {
   ogTitle:"プレートマップ作成ツール",
   ogDesc:"6〜96wellの各wellに条件を書き込み、色分け・一括入力してPDF出力。無料・登録不要・データは外部送信されません。",
   shareText:"プレートマップ作成ツール(6〜96well、PDF出力)",
+  grpPlate:"プレート設定", grpSave:"保存・管理", grpOut:"出力",
+  tipSave:"今の内容をタイトル名で、このブラウザに保存します", tipNew:"画面を空にして新しいプレートを始めます(保存済みは消えません)", tipDel:"「保存済み」で選んだデータを削除します", tipClear:"今の画面の入力をすべて消去します", tipPrint:"印刷画面を開きます。送信先を「PDFに保存」にしてください",
   plate:"プレート", fs:"文字サイズ", mfs:"メモ文字", rl:"行ラベル", saved:"保存済み", auto:"自動", open:"開く…",
   libSave:"タイトルで保存", libDel:"削除", newPlate:"新規", clear:"全消去", print:"PDF保存 / 印刷",
   phTitle:"タイトル(例: 260805 HHV-6B infection)", phMemo:"メモ(細胞株、プレートの種類、培地、共通条件など)", phBulk:"共通条件(例: 293T, DMEM 10%FBS)",
@@ -236,6 +272,8 @@ const I18N = {
   ogTitle:"Plate Map Maker",
   ogDesc:"Write conditions into each well of 6–96 well plates, color-code, bulk-fill and export to PDF. Free, no sign-up, no data sent to any server.",
   shareText:"Plate Map Maker (6–96 well plates, PDF export)",
+  grpPlate:"Plate settings", grpSave:"Save & manage", grpOut:"Export",
+  tipSave:"Save the current plate in this browser under its title", tipNew:"Start a new empty plate (saved plates are kept)", tipDel:"Delete the plate chosen in \"Saved\"", tipClear:"Erase everything on the current screen", tipPrint:"Opens the print dialog — choose \"Save as PDF\" as the destination",
   plate:"Plate", fs:"Font size", mfs:"Memo font", rl:"Row labels", saved:"Saved", auto:"Auto", open:"Open…",
   libSave:"Save by title", libDel:"Delete", newPlate:"New", clear:"Clear all", print:"Save PDF / Print",
   phTitle:"Title (e.g. 260805 HHV-6B infection)", phMemo:"Memo (cell line, plate type, medium, common conditions, etc.)", phBulk:"Common condition (e.g. 293T, DMEM 10% FBS)",
@@ -263,6 +301,7 @@ function applyLang(){
   document.documentElement.lang = LANG;
   document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
   document.querySelectorAll("[data-i18n-html]").forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll("[data-i18n-title]").forEach(el => { el.title = t(el.dataset.i18nTitle); });
   document.querySelectorAll("[data-i18n-ph]").forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
   document.title = t("title");
   const setMeta = (sel, v) => { const m = document.querySelector(sel); if (m) m.setAttribute("content", v); };
