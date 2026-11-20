@@ -334,6 +334,23 @@ function rowLabel(i){
   return String.fromCharCode(base + i);
 }
 
+/* ---- 文字をwell内に自動で収める ---- */
+function fitTa(ta){
+  const max = state.fs === "auto" ? AUTOFS[state.fmt] : +state.fs;
+  ta.style.fontSize = max + "px";
+  if (!ta.value || !ta.clientHeight) return;
+  const over = () => ta.scrollHeight > ta.clientHeight + 1 || ta.scrollWidth > ta.clientWidth + 1;
+  if (!over()) return;
+  let lo = 4, hi = max;
+  for (let i = 0; i < 9; i++) { const mid = (lo + hi) / 2; ta.style.fontSize = mid + "px"; if (over()) hi = mid; else lo = mid; }
+  ta.style.fontSize = Math.max(4, lo * 0.96) + "px";
+}
+function fitAll(){ cells.forEach(row => row.forEach(c => c && fitTa(c.ta))); }
+let fitTimer = null;
+window.addEventListener("resize", () => { clearTimeout(fitTimer); fitTimer = setTimeout(fitAll, 120); });
+window.addEventListener("beforeprint", fitAll);
+window.addEventListener("afterprint", fitAll);
+
 function build(){
   const f = state.fmt, [R,C] = FORMATS[f];
   const tbl = $("plate"); tbl.innerHTML = ""; tbl.classList.toggle("dish", f === "10cm");
@@ -362,7 +379,7 @@ function build(){
       ta.spellcheck = false;
       ta.addEventListener("input", () => {
         if (ta.value) data[id] = ta.value; else delete data[id];
-        save();
+        fitTa(ta); save();
       });
       td.appendChild(ta);
       cells[r][c] = {id, ta, td, r, c};
@@ -375,6 +392,7 @@ function build(){
       td.appendChild(sw);
     }
   }
+  fitAll();
 }
 
 const PALETTE = ["", "#fbc4c4", "#fde0b3", "#fdf3a6", "#c6efcb", "#bfe0fa", "#dccdf5", "#f8c8e4", "#d9d9d9"];
@@ -413,7 +431,7 @@ function targetCells(){
   return kind === "row" ? cells[idx] : cells.map(row => row[idx]);
 }
 function setText(cell, v){
-  cell.ta.value = v;
+  cell.ta.value = v; fitTa(cell.ta);
   const data = state.plates[state.fmt];
   if (v) data[cell.id] = v; else delete data[cell.id];
 }
