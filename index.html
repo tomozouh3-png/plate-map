@@ -266,8 +266,8 @@ const I18N = {
   libSave:"タイトルで保存", libDel:"削除", newPlate:"新規", clear:"全消去", print:"PDF保存 / 印刷",
   phTitle:"タイトル(例: 260805 HHV-6B infection)", phMemo:"メモ(細胞株、プレートの種類、培地、共通条件など)", phBulk:"共通条件(例: 293T, DMEM 10%FBS)",
   bulkAdd:"追記", bulkSet:"上書き", bulkClr:"文字を消去", colorLbl:"色:",
-  hint:"「PDF保存 / 印刷」→ 送信先を「PDFに保存」(用紙: A4 横、余白: デフォルト、背景のグラフィック: ON 推奨)。入力内容はこのブラウザに自動保存されます。行・列ラベルのクリックやwellのドラッグで一括入力・色付けができます。wellを選んで Cmd/Ctrl+C でコピー(文字と色)、貼り付け先を選んで Cmd/Ctrl+V で貼り付けられます。",
-  copied:"{0} well をコピーしました", pasted:"{0} well に貼り付けました",
+  hint:"「PDF保存 / 印刷」→ 送信先を「PDFに保存」(用紙: A4 横、余白: デフォルト、背景のグラフィック: ON 推奨)。入力内容はこのブラウザに自動保存されます。行・列ラベルのクリックやwellのドラッグで一括入力・色付けができます。wellを選んで Cmd/Ctrl+C でコピー(文字と色)、貼り付け先を選んで Cmd/Ctrl+V で貼り付けられます。ドラッグで範囲を選んで Delete キーを押すと、そのwellの文字と色をまとめて消せます。",
+  copied:"{0} well をコピーしました", pasted:"{0} well に貼り付けました", cleared:"{0} well を消去しました(Cmd/Ctrl+Zで元に戻せます)", undone:"元に戻しました",
   shareX:"Xで共有", sponsor:"GitHub Sponsorsで応援",
   privacy:"<b>プライバシー:</b>入力内容(タイトル・メモ・各wellの記載・保存データ)はお使いのブラウザ内(localStorage)にのみ保存され、外部のサーバーには送信されません。ブラウザのデータを消去すると保存内容も消えます。大切な記録はPDFでも保管してください。",
   disclaimer:"<b>免責:</b>本ツールは実験記録の作図補助を目的として現状有姿で提供します。表示や出力内容の正確性・保存の確実性、利用により生じた損害について、作者は責任を負いません。実験の最終的な記録は各自でご確認ください。",
@@ -296,8 +296,8 @@ const I18N = {
   libSave:"Save by title", libDel:"Delete", newPlate:"New", clear:"Clear all", print:"Save PDF / Print",
   phTitle:"Title (e.g. 260805 HHV-6B infection)", phMemo:"Memo (cell line, plate type, medium, common conditions, etc.)", phBulk:"Common condition (e.g. 293T, DMEM 10% FBS)",
   bulkAdd:"Append", bulkSet:"Overwrite", bulkClr:"Clear text", colorLbl:"Color:",
-  hint:"Click \"Save PDF / Print\" and choose \"Save as PDF\" as the destination (paper: A4 landscape, margins: default, background graphics: ON recommended). Your input is saved automatically in this browser. Click a row/column label or drag across wells to fill in or color many wells at once. Select wells and press Cmd/Ctrl+C to copy (text and color), then select the destination and press Cmd/Ctrl+V to paste.",
-  copied:"Copied {0} well(s)", pasted:"Pasted into {0} well(s)",
+  hint:"Click \"Save PDF / Print\" and choose \"Save as PDF\" as the destination (paper: A4 landscape, margins: default, background graphics: ON recommended). Your input is saved automatically in this browser. Click a row/column label or drag across wells to fill in or color many wells at once. Select wells and press Cmd/Ctrl+C to copy (text and color), then select the destination and press Cmd/Ctrl+V to paste. Drag to select wells and press Delete to clear their text and color at once.",
+  copied:"Copied {0} well(s)", pasted:"Pasted into {0} well(s)", cleared:"Cleared {0} well(s) (Cmd/Ctrl+Z to undo)", undone:"Undone",
   shareX:"Share on X", sponsor:"Support on GitHub Sponsors",
   privacy:"<b>Privacy:</b> Everything you enter (title, memo, well contents, saved plates) is stored only in your own browser (localStorage) and is never sent to any server. Clearing your browser data also erases it. Keep important records as PDFs too.",
   disclaimer:"<b>Disclaimer:</b> This tool is provided \"as is\" as a drawing aid for experiment records. The author is not liable for the accuracy of what is displayed or exported, the reliability of saved data, or any damage arising from its use. Please verify your final records yourself.",
@@ -544,7 +544,7 @@ function openBulkRange(list, anchor){
 
 /* ---- wellのコピー&ペースト(文字+色) ---- */
 let wellBuf = null;
-const WELL_MSG = {copied:"{0} well をコピーしました", pasted:"{0} well に貼り付けました"};
+const WELL_MSG = {copied:"{0} well をコピーしました", pasted:"{0} well に貼り付けました", cleared:"{0} well を消去しました(Cmd/Ctrl+Zで元に戻せます)", undone:"元に戻しました"};
 let toastTimer = null;
 function toast(key, n){
   let el = document.getElementById("toast");
@@ -615,6 +615,36 @@ document.addEventListener("paste", e => {
     for (let i = 0; i < wellBuf.rows; i++) for (let j = 0; j < wellBuf.cols; j++) n += put(target.r1 + i, target.c1 + j, wellBuf.items[i][j]);
   }
   save(); toast("pasted", n);
+});
+
+/* ---- 範囲選択したwellをDeleteで全消去 / Cmd+Zで元に戻す ---- */
+let undoBuf = null;
+document.addEventListener("keydown", e => {
+  const ae = document.activeElement;
+  const editing = ae && (ae.tagName === "INPUT" || ae.tagName === "TEXTAREA") && (ae.id !== "bulkText" || ae.value);
+  if ((e.key === "Delete" || e.key === "Backspace") && !editing && !e.metaKey && !e.ctrlKey && !e.altKey) {
+    const rc = selRect(); if (!rc) return;
+    e.preventDefault();
+    const colors = (state.colors[state.fmt] = state.colors[state.fmt] || {});
+    const snap = []; let n = 0;
+    for (let r = rc.r1; r <= rc.r2; r++) for (let c = rc.c1; c <= rc.c2; c++) {
+      const cell = cells[r][c];
+      if (!cell.td.classList.contains("sel")) continue;
+      snap.push({cell, text:cell.ta.value, color:colors[cell.id] || ""});
+      setText(cell, ""); delete colors[cell.id]; cell.td.style.background = ""; n++;
+    }
+    undoBuf = {snap, fmt:state.fmt};
+    save(); toast("cleared", n);
+  } else if ((e.key === "z" || e.key === "Z") && (e.metaKey || e.ctrlKey) && !e.shiftKey && !editing && undoBuf && undoBuf.fmt === state.fmt) {
+    e.preventDefault();
+    const colors = (state.colors[state.fmt] = state.colors[state.fmt] || {});
+    undoBuf.snap.forEach(({cell, text, color}) => {
+      if (!document.body.contains(cell.td)) return;
+      setText(cell, text);
+      if (color) { colors[cell.id] = color; cell.td.style.background = color; }
+    });
+    undoBuf = null; save(); toast("undone", "");
+  }
 });
 
 function applyMfs(){
